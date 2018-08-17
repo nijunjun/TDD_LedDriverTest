@@ -70,6 +70,21 @@ TEST(LedDriver, TurnOnLedOne)
  * @function TDD测试项
  *
  * @param	LedDriver 组名
+ * @param   TurnOnLedOne 测试函数定义,打开一个LED灯
+ *
+ **************************************************/
+TEST(LedDriver, TurnOnMultipleLeds)
+{
+	LedDriver_TurnOn(9);
+	LedDriver_TurnOn(8);
+	TEST_ASSERT_EQUAL_HEX16(0x180, virtualLeds);
+}
+
+
+/**************************************************
+ * @function TDD测试项
+ *
+ * @param	LedDriver 组名
  * @param   TurnOffLedOne 测试函数定义,关闭一个LED灯
  *
  **************************************************/
@@ -90,4 +105,5 @@ TEST_GROUP_RUNNER(LedDriver)
 	RUN_TEST_CASE(LedDriver, LedsOffAfterCreate);
 	RUN_TEST_CASE(LedDriver, TurnOnLedOne);
 	RUN_TEST_CASE(LedDriver, TurnOffLedOne);
+	RUN_TEST_CASE(LedDriver, TurnOnMultipleLeds);
 }
