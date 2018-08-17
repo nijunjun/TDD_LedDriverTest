@@ -10,6 +10,8 @@
 #include "unity_fixture.h"
 #include "led_status_ctrl.h"
 
+static uint16_t virtualLeds;
+
 /**************************************************
  * @function TDD测试组声明
  *
@@ -26,6 +28,7 @@ TEST_GROUP(LedDriver);
  **************************************************/
 TEST_SETUP(LedDriver)
 {
+	LedDriver_Create(&virtualLeds);
 }
 
 /**************************************************
@@ -42,13 +45,37 @@ TEST_TEAR_DOWN(LedDriver)
  * @function TDD测试项
  *
  * @param	LedDriver 组名
- * @param   LedsOffAfterCreate 测试函数定义
+ * @param   LedsOffAfterCreate 测试函数定义，初始化驱动
  *
  **************************************************/
 TEST(LedDriver, LedsOffAfterCreate)
 {
-	uint16_t virtualLeds = 0xffff;
-	LedDriver_Create(&virtualLeds);
+	TEST_ASSERT_EQUAL_HEX16(0, virtualLeds);
+}
+
+/**************************************************
+ * @function TDD测试项
+ *
+ * @param	LedDriver 组名
+ * @param   TurnOnLedOne 测试函数定义,打开一个LED灯
+ *
+ **************************************************/
+TEST(LedDriver, TurnOnLedOne)
+{
+	LedDriver_TurnOn(1);
+	TEST_ASSERT_EQUAL_HEX16(1, virtualLeds);
+}
+
+/**************************************************
+ * @function TDD测试项
+ *
+ * @param	LedDriver 组名
+ * @param   TurnOffLedOne 测试函数定义,关闭一个LED灯
+ *
+ **************************************************/
+TEST(LedDriver, TurnOffLedOne)
+{
+	LedDriver_TurnOff(1);
 	TEST_ASSERT_EQUAL_HEX16(0, virtualLeds);
 }
 
@@ -61,4 +88,6 @@ TEST(LedDriver, LedsOffAfterCreate)
 TEST_GROUP_RUNNER(LedDriver)
 {
 	RUN_TEST_CASE(LedDriver, LedsOffAfterCreate);
+	RUN_TEST_CASE(LedDriver, TurnOnLedOne);
+	RUN_TEST_CASE(LedDriver, TurnOffLedOne);
 }
